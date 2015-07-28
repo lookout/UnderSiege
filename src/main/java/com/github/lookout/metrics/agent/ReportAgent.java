@@ -22,7 +22,7 @@ public class ReportAgent {
         final String[] reportingHostPorts = (agentArgs != null) ? agentArgs.split(",") : new String[]{null};
         for (final String reportingHostPort : reportingHostPorts) {
             final HostPortInterval hostPortInterval = new HostPortInterval(reportingHostPort);
-            final StatsDClient client = new NonBlockingStatsDClient(host, hostPortInterval.getHost(), hostPortInterval.getPort());
+            final StatsDClient client = new NonBlockingStatsDClient(hostPortInterval.getPrefix() != null ? hostPortInterval.getPrefix() : host, hostPortInterval.getHost(), hostPortInterval.getPort());
             final StatsdReporter reporter = new StatsdReporter(hostPortInterval, client);
             reporter.start(hostPortInterval.getInterval(), TimeUnit.SECONDS);
         }
