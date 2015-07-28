@@ -11,14 +11,27 @@ public class HostPortInterval {
     private final String host;
     private final int port;
     private final int interval;
+    private final String prefix;
 
-    public HostPortInterval(final String hostPortInterval) {
-        if (hostPortInterval == null || hostPortInterval.isEmpty()) {
+    public HostPortInterval(final String hostPortIntervalPrefix) {
+        if (hostPortIntervalPrefix == null || hostPortIntervalPrefix.isEmpty()) {
             this.host = DEFAULT_HOST;
             this.port = DEFAULT_PORT;
             this.interval = DEFAULT_INTERVAL;
+            this.prefix = null;
             return;
         }
+
+        String hostPortInterval;
+        int prefixOffset = hostPortIntervalPrefix.lastIndexOf('/');
+        if (prefixOffset != -1) {
+            this.prefix = hostPortIntervalPrefix.substring(prefixOffset + 1);
+            hostPortInterval = hostPortIntervalPrefix.substring(0, prefixOffset);
+        } else {
+            this.prefix = null;
+            hostPortInterval = hostPortIntervalPrefix;
+        }
+
         int intervalOffset = hostPortInterval.lastIndexOf('@');
         final String hostPort;
         if (intervalOffset == -1) {
@@ -59,6 +72,10 @@ public class HostPortInterval {
 
     public int getInterval() {
         return interval;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 
     @Override
